@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<mapper namespace="com.huatec.teaching.dao.TuserDao">
+
+	<resultMap id="t_user" type="com.huatec.teaching.domain.TuserDO">
+        <result property="id" column="id" javaType="java.lang.Integer"/>
+        <result property="name" column="name" javaType="java.lang.String"/>
+        <result property="age" column="age" javaType="java.lang.Integer"/>
+	</resultMap>
+	<!--<cache type="com.study.cache.MyCache" flushInterval="6000000" />-->
+	
+	<sql id="myColumns">
+	   
+			a.id,
+			a.name,
+			a.age	  
+	</sql>
+	
+	<sql id="myColumns1">
+	   
+			a.id as id,
+			a.name as name,
+			a.age as age	  
+	</sql>
+
+	<insert id="save" useGeneratedKeys="true" keyProperty="id"  parameterType="com.huatec.teaching.domain.TuserDO">
+    
+        INSERT INTO t_user 
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+        <if test="id!=null">
+					id ,
+				</if>	
+        <if test="name!=null">
+					name ,
+				</if>	
+        <if test="age!=null">
+					age 
+				</if>	
+        </trim>
+         <trim prefix="values (" suffix=")" suffixOverrides=",">
+        	<if test="id!=null">
+        	#{id} ,
+        	</if>
+        	<if test="name!=null">
+        	#{name} ,
+        	</if>
+        	<if test="age!=null">
+        	#{age} 
+        	</if>
+        </trim>
+  
+		
+	</insert>
+    
+	<update id="update"  parameterType="com.huatec.teaching.domain.TuserDO" >
+    
+        UPDATE t_user 
+        <set>
+	        <if test="name!=null">
+	        name = #{name} ,
+	        </if>
+	        <if test="age!=null">
+	        age = #{age} 
+	        </if>
+	        </set>
+        WHERE 
+	        id = #{id} 
+   
+	</update>
+
+    <delete id="delete" parameterType="map">
+        DELETE FROM t_user WHERE
+        id = #{id}
+
+         
+    </delete>
+    
+    <select id="findById" resultMap="t_user"  parameterType="map">
+		SELECT <include refid="myColumns"/>
+	 
+		    FROM t_user a
+	        WHERE 
+		        a.id = #{id}
+
+		         
+	  
+	</select>
+	
+	<select id="findTuserList" parameterType="map" resultMap="t_user">
+		select 
+		<include refid="myColumns"/>
+		 from t_user a
+		<where>
+			<include refid="myWhereInclude"/>
+		</where>
+		<include refid="BaseSql.sqlEnd"/>
+		
+	</select>	
+	<select id="findTuserCount" parameterType="map"
+		resultType="int">
+		select count(*) from t_user a
+		<where>
+			<include refid="myWhereInclude"/>
+		</where>
+		<include refid="BaseSql.sqlEndNoLimit"/>
+	</select>
+	
+		
+	<sql id="myWhereInclude">
+	     <if test="entity.id!=null">
+				AND a.id = #{entity.id}
+			</if>
+	     <if test="entity.name!=null">
+				AND a.name = #{entity.name}
+			</if>
+	     <if test="entity.age!=null">
+				AND a.age = #{entity.age}
+			</if>
+	</sql>
+</mapper>
+

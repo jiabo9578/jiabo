@@ -1,0 +1,29 @@
+server:
+  port: 8080
+  tomcat:
+    uri-encoding: utf-8
+    
+#公共配置与profiles选择无关
+mybatis:
+  typeAliasesPackage: com.huatec.teaching.entity
+  mapperLocations: classpath:mybatis/*.xml
+
+#开发配置
+spring:
+
+  datasource:
+    url: jdbc:mysql://localhost:3306/demo?useUnicode=true&characterEncoding=utf8
+    username: root
+    password: root
+    driver-class-name: com.mysql.jdbc.Driver
+  mvc:
+    view:
+      # 页面默认前缀目录
+      prefix: /WEB-INF/jsp/
+      # 响应页面默认后缀
+      suffix: .jsp
+  http:
+    encoding:
+      charset:UTF-8  
+
+  
